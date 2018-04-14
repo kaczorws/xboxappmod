@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- Configuration -->
+<settings>
+	<!-- Hosts file entry -->
+	<hostsblocker>127.0.0.1 settings.data.microsoft.com</hostsblocker>
+
+	<!-- Desired quality setting (10-90) -->
+	<quality>70</quality>
+	
+	<!-- Desired resolution setting (480/720/1080) -->
+	<resolution>1080</resolution>	
+	
+	<!-- Desired framerate (30/60) -->
+	<framerate>30</framerate>
+</settings>
