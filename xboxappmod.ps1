@@ -37,17 +37,17 @@ If (Get-Process -Name XboxApp -ErrorAction SilentlyContinue) {
 
 
 #Terminate if Xbox App setings file does not exist
-$XboxConfigPath = $env:LOCALAPPDATA + "\Packages\" + (Get-AppxPackage -Name "Microsoft.XboxApp" | Select -ExpandProperty Name) + "_" + (Get-AppxPackage -Name "Microsoft.XboxApp" | Select -ExpandProperty PublisherId) + "\LocalState\settings.json"
+$XboxConfigPath = $env:LOCALAPPDATA + "\Packages\" + (Get-AppxPackage -Name "Microsoft.XboxApp" | Select -ExpandProperty Name) + "_" + (Get-AppxPackage -Name "Microsoft.XboxApp" | Select -ExpandProperty PublisherId) + "\LocalState\Settings.json"
 if (!(Test-Path -Path $XboxConfigPath )) {
     TerminateWithExplanation "Xbox App settings file not detected - make sure that you're logged to Xbox App using Xbox Live/Microsoft account and have been using streaming to PC at least once. Exiting now."
 }
 
 
 #Terminate if Xbox App setings file is corrupted or Microsoft modified the structure
-#Looking for section "GAME_STREAMING_VERY_HIGH_QUALITY_SETTINGS":"12000000,1080,60,"
+#Looking for section "GAME_STREAMING_VERY_HIGH_QUALITY_SETTINGS": "12000000,1080,60,"
 $XboxConfigFile = Get-Content $XboxConfigPath
-$XboxConfigFileCorrupted = $XboxConfigFile -match "GAME_STREAMING_VERY_HIGH_QUALITY_SETTINGS[`"][:][`"](\d+)[,]\d+[,](\d+)[,]"
-If (!($XboxConfigFileCorrupted -contains $true)) {
+$XboxConfigFileCorrupted = $XboxConfigFile -match "GAME_STREAMING_VERY_HIGH_QUALITY_SETTINGS[`"][:]\s[`"](\d+)[,]\d+[,](\d+)[,]"
+If ($XboxConfigFileCorrupted[0] -eq $null) {
     TerminateWithExplanation "Xbox App settings file corrupted or Microsoft modified the structure. Please check for new version of the script."        
 }
 
@@ -103,16 +103,16 @@ if ($HostsBlockerPresent -contains $true) {
 
 #Backup of Xbox App settings
 Write-Host -NoNewLine "Backing up Xbox App settings file..."
-    $XboxConfigBackupPath = $PSScriptRoot + "\settings.json.bak"
+    $XboxConfigBackupPath = $PSScriptRoot + "\Settings.json.bak"
     Copy-Item -ErrorAction Stop $XboxConfigPath -Destination $XboxConfigBackupPath
 Write-Host -ForegroundColor Green "DONE!"
 Compare2Files (Get-Content $XboxConfigPath) (Get-Content $XboxConfigBackupPath) "Xbox settings backup"
 
 
 #Find matching pattern in settings file and replace it
-#Looking for section "GAME_STREAMING_VERY_HIGH_QUALITY_SETTINGS":"12000000,1080,60,"
+#Looking for section "GAME_STREAMING_VERY_HIGH_QUALITY_SETTINGS": "12000000,1080,60,"
 Write-Host -NoNewLine "Modyfing Xbox App settings file with values: Quality = $QualitySetting, Resolution = $DisplayResolution, Framerate = $FrameRate..."
-    $XboxConfigFile = $XboxConfigFile -replace "GAME_STREAMING_VERY_HIGH_QUALITY_SETTINGS[`"][:][`"](\d+)[,]\d+[,](\d+)[,]",("GAME_STREAMING_VERY_HIGH_QUALITY_SETTINGS`":`""+$QualitySetting+"000000,$DisplayResolution,$FrameRate,")
+    $XboxConfigFile = $XboxConfigFile -replace "GAME_STREAMING_VERY_HIGH_QUALITY_SETTINGS[`"][:]\s[`"](\d+)[,]\d+[,](\d+)[,]",("GAME_STREAMING_VERY_HIGH_QUALITY_SETTINGS`": `""+$QualitySetting+"000000,$DisplayResolution,$FrameRate,")
     [IO.File]::WriteAllLines($XboxConfigPath, $XboxConfigFile)
 Write-Host -ForegroundColor Green "DONE!"
 
@@ -124,7 +124,7 @@ Write-Host "XboxApp process started, waiting for XboxApp process to end..."
 While (Get-Process -Name XboxApp -ErrorAction SilentlyContinue)
 {
     #Write-Host "XboxApp process still visible"
-    Start-Sleep -Seconds 1
+    Start-Sleep -Milliseconds 500
 
 }
 Write-Host "XboxApp process has ended."
@@ -155,7 +155,7 @@ Write-Host -ForegroundColor Green "DONE!"
 
 
 Write-Host "Ending script."
-Start-Sleep -Seconds 2
+Start-Sleep -Milliseconds 500
 
 } Catch {
     #Writing catched errors to a file
