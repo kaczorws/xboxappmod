@@ -1,5 +1,5 @@
 ```diff
-- AS OF 2023 THIS SCRIPT IS NO LONGER FUNCTIONAL
+- AS OF 2021 THIS SCRIPT IS NO LONGER FUNCTIONAL AND WILL NOT BE UPDATED
 
 - Somewhere in 2021 Microsoft has changed the server from which settings JSON file was downloaded.
 - I was not able to trace the correct server due to limited time.
