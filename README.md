@@ -1,3 +1,18 @@
+```diff
+- AS OF 2023 THIS SCRIPT IS NO LONGER FUNCTIONAL
+
+- Somewhere in 2021 Microsoft has changed the server from which settings JSON file was downloaded.
+- I was not able to trace the correct server due to limited time.
+- Later, they abandoned Xbox App completely and switched to new Xbox Companion App which used different settings.
+- Somewhere in 2023 they switched the app again to Xbox Gaming App.
+- This script worked only for old Xbox App which supported Xbox One/One S/One X only.
+- Xbox Series X/Series S were never supported as they used different apps mentioned above.
+
+- As I no longer use Xbox I will not make any updates to this script (Original Xbox App is not available anyway)
+- I will keep the script here for historical purposes only.
+```
+
+
 # Xbox App Mod Script
 
 *Script lets you modify standard Windows 10 Xbox App streaming to PC settings*
